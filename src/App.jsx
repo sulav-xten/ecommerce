@@ -6,6 +6,7 @@ import "./App.css";
 import Header from "./components/Header.jsx";
 import Footer from "./components/Footer.jsx";
 import Home from "./components/Home.jsx";
+import ErrorPage from "./components/ErrorPage.jsx";
 
 function App() {
   return (
@@ -15,6 +16,8 @@ function App() {
         <Routes>
           <>
             <Route path="/" element={<Home />} />
+            {/* Catch-all other routes for displaying an error page */}
+            <Route path="*" element={<ErrorPage />} />
           </>
         </Routes>
         <Footer />
