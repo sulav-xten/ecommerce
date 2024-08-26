@@ -1,58 +1,58 @@
 #root {
-    margin: 0 auto;
-    padding: 0px;
-    text-align: center;
+  margin: 0 auto;
+  padding: 0px;
+  text-align: center;
 }
 
 .logo {
-    height: 6em;
-    padding: 1.5em;
-    will-change: filter;
-    transition: filter 300ms;
+  height: 6em;
+  padding: 1.5em;
+  will-change: filter;
+  transition: filter 300ms;
 }
 
 .logo:hover {
-    filter: drop-shadow(0 0 2em #646cffaa);
+  filter: drop-shadow(0 0 2em #646cffaa);
 }
-
 
 /*Navbar Header Component*/
 
-@media screen and (max-width: 989px) {
-    .navbar-nav {
-        text-align: left;
-    }
+@media (max-width: 991px) {
+  .navbar-collapse {
+    text-align: left;
+  }
+  .navbar-nav {
+    align-items: flex-start;
+  }
 }
-
 
 /*Error Page Component*/
 
 .error-page {
-    background-color: #f8f9fa;
+  background-color: #f8f9fa;
 }
 
 .error-page h1 {
-    font-size: 7rem;
-    color: #dc3545;
+  font-size: 7rem;
+  color: #dc3545;
 }
 
 .error-page h2 {
-    font-size: 2rem;
-    color: #343a40;
+  font-size: 2rem;
+  color: #343a40;
 }
 
 .error-page p {
-    font-size: 1.2rem;
-    color: #6c757d;
+  font-size: 1.2rem;
+  color: #6c757d;
 }
-
 
 /*Footer Component*/
 
 footer {
-    text-align: justify;
+  text-align: justify;
 }
 
 hr {
-    border-color: #646cffaa;
+  border-color: #646cffaa;
 }
