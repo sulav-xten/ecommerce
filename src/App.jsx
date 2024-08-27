@@ -6,7 +6,11 @@ import "./App.css";
 import Header from "./components/Header.jsx";
 import Footer from "./components/Footer.jsx";
 import Home from "./components/Home.jsx";
+import ProductDetail from "./components/ProductDetail.jsx";
 import ErrorPage from "./components/ErrorPage.jsx";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+
+const queryClient = new QueryClient();
 
 function App() {
   return (
@@ -16,6 +20,7 @@ function App() {
         <Routes>
           <>
             <Route path="/" element={<Home />} />
+            <Route path="/product/:id" element={<ProductDetail />} />
             {/* Catch-all other routes for displaying an error page */}
             <Route path="*" element={<ErrorPage />} />
           </>
@@ -28,7 +33,9 @@ function App() {
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <App />
+    <QueryClientProvider client={queryClient}>
+      <App />
+    </QueryClientProvider>
   </React.StrictMode>
 );
 
