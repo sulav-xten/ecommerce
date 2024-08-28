@@ -12,7 +12,7 @@ import {
   faStar as farStar
 } from "@fortawesome/free-solid-svg-icons";
 
-const fetchProducts = async () => {
+export const fetchProducts = async () => {
   const { data } = await axios.get("https://dummyjson.com/products");
   return data.products;
 };
@@ -33,7 +33,7 @@ export const renderStars = (rating) => {
         <FontAwesomeIcon
           key={i + fullStars + 1}
           icon={farStar}
-          color="lightgray"
+          color="#e6e6e6"
         />
       ))}
     </>

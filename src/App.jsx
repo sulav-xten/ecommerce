@@ -7,6 +7,7 @@ import Header from "./components/Header.jsx";
 import Footer from "./components/Footer.jsx";
 import Home from "./components/Home.jsx";
 import ProductDetail from "./components/ProductDetail.jsx";
+import Category from "./components/Category.jsx";
 import ErrorPage from "./components/ErrorPage.jsx";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
@@ -21,6 +22,7 @@ function App() {
           <>
             <Route path="/" element={<Home />} />
             <Route path="/product/:id" element={<ProductDetail />} />
+            <Route path="/category/:category" element={<Category />} />
             {/* Catch-all other routes for displaying an error page */}
             <Route path="*" element={<ErrorPage />} />
           </>

@@ -6,8 +6,9 @@ import { renderStars } from "./ProductList";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBasketShopping } from "@fortawesome/free-solid-svg-icons";
 import Nav from "react-bootstrap/Nav";
+// import Form from "react-bootstrap/Form";
 
-const formatDate = (timestamp) => {
+export const formatDate = (timestamp) => {
   const date = new Date(timestamp);
 
   // Formatting options
@@ -24,12 +25,70 @@ const formatDate = (timestamp) => {
   return date.toLocaleDateString("en-US", options);
 };
 
-const ReviewSection = ({ reviews }) => (
+const ReviewSection = ({ reviews, ratingCounts }) => (
   <div
     className="container mx-auto mb-5 p-4 rounded"
     style={{ textAlign: "justify" }}
   >
     <h4 className="mb-4">Customer Reviews</h4>
+    {reviews && reviews.length > 0 ? (
+      <div className="row mb-4">
+        {/*Average Rating */}
+        <div className="col-12 col-md-6 mb-4">
+          <h5>
+            Average Rating:{" "}
+            {renderStars(
+              (
+                reviews.reduce((acc, review) => acc + review.rating, 0) /
+                reviews.length
+              ).toFixed(1)
+            )}
+          </h5>
+          <p>
+            {(
+              reviews.reduce((acc, review) => acc + review.rating, 0) /
+              reviews.length
+            ).toFixed(1)}{" "}
+            ({reviews.length} reviews)
+          </p>
+          {Object.keys(ratingCounts).map((rating) => (
+            <p key={rating}>
+              {renderStars(rating)} {ratingCounts[rating]}{" "}
+              {ratingCounts[rating] === 1
+                ? "review"
+                : ratingCounts[rating] === 0
+                ? "review"
+                : "reviews"}
+            </p>
+          ))}
+        </div>
+        {/*Write your review */}
+        <div className="col-12 col-md-6 mb-4">
+          {/* <form>
+            <Form.Group className="mb-3" controlId="formBasicEmail">
+              <Form.Label>Email address</Form.Label>
+              <Form.Control type="email" placeholder="Enter email" />
+              <Form.Text className="text-muted">
+                We'll never share your email with anyone else.
+              </Form.Text>
+            </Form.Group>
+
+            <Form.Group className="mb-3" controlId="formBasicPassword">
+              <Form.Label>Password</Form.Label>
+              <Form.Control type="password" placeholder="Password" />
+            </Form.Group>
+            <Form.Group className="mb-3" controlId="formBasicCheckbox">
+              <Form.Check type="checkbox" label="Check me out" />
+            </Form.Group>
+            <Button variant="primary" type="submit">
+              Submit
+            </Button>
+          </form> */}
+        </div>
+      </div>
+    ) : (
+      ""
+    )}
     {reviews && reviews.length > 0 ? (
       reviews.map((review, index) => (
         <div
@@ -121,6 +180,15 @@ const ProductDetail = () => {
   const handleSelectTab = (tab) => {
     setActiveTab(tab);
   };
+
+  // Calculate frequency of each rating
+  const ratingCounts = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
+
+  product.reviews.forEach((review) => {
+    if (ratingCounts.hasOwnProperty(review.rating)) {
+      ratingCounts[review.rating] += 1;
+    }
+  });
 
   return (
     <div className="container">
@@ -261,7 +329,12 @@ const ProductDetail = () => {
         </Nav.Item>
       </Nav>
       <div className="mt-3">
-        {activeTab === "review" && <ReviewSection reviews={product.reviews} />}
+        {activeTab === "review" && (
+          <ReviewSection
+            reviews={product.reviews}
+            ratingCounts={ratingCounts}
+          />
+        )}
         {activeTab === "warranty" && (
           <WarrantyInfoSection
             warrantyInformation={product.warrantyInformation}

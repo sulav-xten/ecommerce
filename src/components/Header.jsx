@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Form, Button } from "react-bootstrap";
 import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import NavDropdown from "react-bootstrap/NavDropdown";
+import axios from "axios";
 // Import FontAwesome icons
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -18,6 +19,26 @@ function Header() {
     setShowSearch(!showSearch);
   };
 
+  const [categories, setCategories] = useState([]);
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const response = await axios.get("https://dummyjson.com/products");
+        const categories = response.data.products.map(
+          (product) => product.category
+        );
+        // Remove duplicates
+        const uniqueCategories = [...new Set(categories)];
+        setCategories(uniqueCategories);
+      } catch (error) {
+        console.error("Error fetching categories:", error);
+      }
+    };
+
+    fetchCategories();
+  }, []);
+
   return (
     <Navbar expand="lg" className="bg-body-tertiary">
       <Container>
@@ -26,15 +47,15 @@ function Header() {
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto flex-grow-1">
             <NavDropdown title="Categories" id="basic-nav-dropdown">
-              <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
-              <NavDropdown.Item href="#action/3.2">
-                Another action
-              </NavDropdown.Item>
-              <NavDropdown.Item href="#action/3.3">Something</NavDropdown.Item>
-              <NavDropdown.Divider />
+              {categories.map((category, index) => (
+                <NavDropdown.Item key={index} href={`/category/${category}`}>
+                  {category}
+                </NavDropdown.Item>
+              ))}
+              {/* <NavDropdown.Divider />
               <NavDropdown.Item href="#action/3.4">
                 Separated link
-              </NavDropdown.Item>
+              </NavDropdown.Item> */}
             </NavDropdown>
             <Nav.Link href="/">Home</Nav.Link>
             <Nav.Link href="/about">About</Nav.Link>
