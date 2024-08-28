@@ -18,7 +18,7 @@ const fetchProducts = async () => {
 };
 
 // Function to render star icons based on rating
-const renderStars = (rating) => {
+export const renderStars = (rating) => {
   const fullStars = Math.floor(rating); // Number of full stars
   const hasHalfStar = rating % 1 !== 0; // Determine if there's a half star
   const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0); // Number of empty stars
@@ -101,24 +101,20 @@ const ProductList = () => {
                           className="small"
                           style={{
                             backgroundColor:
-                              product.stock > 0 ? "green" : "red",
+                              product.availabilityStatus == "In Stock"
+                                ? "green"
+                                : "#c1292e",
                             color: "white",
                             padding: "5px",
                             borderRadius: "5px"
                           }}
                         >
-                          Stock: {product.stock} units
+                          {product.availabilityStatus}
                         </span>
                       }
                     </Card.Text>
                     <Card.Text></Card.Text>
-                    <s>
-                      $
-                      {(
-                        product.price * product.discountPercentage +
-                        product.price
-                      ).toFixed(2)}
-                    </s>
+                    <s>$ {product.price}</s>
                     &nbsp;
                     <span
                       className="small"
@@ -131,7 +127,13 @@ const ProductList = () => {
                     >
                       -{product.discountPercentage} %
                     </span>
-                    <Card.Text>$ {product.price}</Card.Text>
+                    <Card.Text>
+                      ${" "}
+                      {(
+                        product.price -
+                        (product.price * product.discountPercentage) / 100
+                      ).toFixed(2)}
+                    </Card.Text>
                     <Button variant="primary">Add to Cart</Button>
                   </Card.Body>
                 </Card>
