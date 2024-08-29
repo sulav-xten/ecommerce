@@ -1,7 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import Button from "react-bootstrap/Button";
-import Card from "react-bootstrap/Card";
-import CardGroup from "react-bootstrap/CardGroup";
+import { Button, Card, CardGroup } from "react-bootstrap";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 // Import FontAwesome icons
@@ -76,73 +74,110 @@ const ProductList = () => {
   });
 
   return (
-    <div className="container mx-auto mb-4">
-      {Object.keys(groupedByCategory).map((category) => (
-        <div key={category}>
-          <h3 className="my-4">
-            {category.charAt(0).toUpperCase() + category.slice(1)}
-          </h3>
-          <CardGroup>
-            {groupedByCategory[category].map((product) => (
-              <div className="col pb-3" key={product.id}>
-                <Card
-                  style={{ width: "18rem", cursor: "pointer" }}
-                  onClick={() => handleCardClick(product)}
-                >
-                  <Card.Img variant="top" src={product.thumbnail} />
-                  <Card.Body>
-                    <Card.Title style={{ height: "3rem" }}>
-                      {product.title}
-                    </Card.Title>
-                    <Card.Text>
-                      {renderStars(product.rating)}&nbsp;
-                      {
-                        <span
-                          className="small"
-                          style={{
-                            backgroundColor:
-                              product.availabilityStatus == "In Stock"
-                                ? "green"
-                                : "#c1292e",
-                            color: "white",
-                            padding: "5px",
-                            borderRadius: "5px"
-                          }}
-                        >
-                          {product.availabilityStatus}
-                        </span>
-                      }
-                    </Card.Text>
-                    <Card.Text></Card.Text>
-                    <s>$ {product.price}</s>
-                    &nbsp;
-                    <span
-                      className="small"
-                      style={{
-                        backgroundColor: "#87c6eb",
-                        color: "white",
-                        padding: "5px",
-                        borderRadius: "5px"
-                      }}
-                    >
-                      -{product.discountPercentage} %
-                    </span>
-                    <Card.Text>
-                      ${" "}
-                      {(
-                        product.price -
-                        (product.price * product.discountPercentage) / 100
-                      ).toFixed(2)}
-                    </Card.Text>
-                    <Button variant="primary">Add to Cart</Button>
-                  </Card.Body>
-                </Card>
+    <>
+      {/*List of Categories */}
+      <div className="container mx-auto mb-4">
+        <h3 className="my-4">Categories</h3>
+        <CardGroup>
+          {Object.keys(groupedByCategory).map((category) => (
+            <div className="col pb-3" key={category}>
+              <Card
+                className="me-3" // Add margin-end to space out cards
+                style={{ width: "18rem", cursor: "pointer" }}
+                onClick={() => navigate(`/category/${category}`)}
+              >
+                {/* <Card.Img variant="top" src={category.thumbnail} /> */}
+                <Card.Body>
+                  <Card.Title style={{ height: "1rem" }}>
+                    {category.charAt(0).toUpperCase() + category.slice(1)}
+                  </Card.Title>
+                </Card.Body>
+              </Card>
+            </div>
+          ))}
+        </CardGroup>
+      </div>
+      {/*List of Products based on Categories */}
+      <div className="container mx-auto mb-4">
+        {Object.keys(groupedByCategory).map((category) => (
+          <div key={category}>
+            <div className="d-flex justify-content-between align-items-center my-4">
+              <h3>{category.charAt(0).toUpperCase() + category.slice(1)}</h3>
+              <Button
+                variant="link"
+                onClick={() => navigate(`/category/${category}`)}
+              >
+                View All
+              </Button>
+            </div>
+            <div className="overflow-auto">
+              <div className="d-flex flex-nowrap">
+                {groupedByCategory[category]
+                  .slice(0, 4) // Limit to 4 products
+                  .map((product) => (
+                    <div className="col pb-3" key={product.id}>
+                      <Card
+                        className="me-3" // Add margin-end to space out cards
+                        style={{ width: "18rem", cursor: "pointer" }}
+                        key={product.id}
+                        onClick={() => handleCardClick(product)}
+                      >
+                        <Card.Img variant="top" src={product.thumbnail} />
+                        <Card.Body>
+                          <Card.Title style={{ height: "3rem" }}>
+                            {product.title}
+                          </Card.Title>
+                          <Card.Text>
+                            {renderStars(product.rating)}&nbsp;
+                            {
+                              <span
+                                className="small"
+                                style={{
+                                  backgroundColor:
+                                    product.availabilityStatus == "In Stock"
+                                      ? "green"
+                                      : "#c1292e",
+                                  color: "white",
+                                  padding: "5px",
+                                  borderRadius: "5px"
+                                }}
+                              >
+                                {product.availabilityStatus}
+                              </span>
+                            }
+                          </Card.Text>
+                          <Card.Text></Card.Text>
+                          <s>$ {product.price}</s>
+                          &nbsp;
+                          <span
+                            className="small"
+                            style={{
+                              backgroundColor: "#87c6eb",
+                              color: "white",
+                              padding: "5px",
+                              borderRadius: "5px"
+                            }}
+                          >
+                            -{product.discountPercentage} %
+                          </span>
+                          <Card.Text>
+                            ${" "}
+                            {(
+                              product.price -
+                              (product.price * product.discountPercentage) / 100
+                            ).toFixed(2)}
+                          </Card.Text>
+                          <Button variant="primary">Add to Cart</Button>
+                        </Card.Body>
+                      </Card>
+                    </div>
+                  ))}
               </div>
-            ))}
-          </CardGroup>
-        </div>
-      ))}
-    </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </>
   );
 };
 

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import "./App.css";
@@ -8,6 +8,7 @@ import Footer from "./components/Footer.jsx";
 import Home from "./components/Home.jsx";
 import ProductDetail from "./components/ProductDetail.jsx";
 import Category from "./components/Category.jsx";
+import Searched from "./components/Searched.jsx";
 import ErrorPage from "./components/ErrorPage.jsx";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
@@ -23,6 +24,7 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/product/:id" element={<ProductDetail />} />
             <Route path="/category/:category" element={<Category />} />
+            <Route path="/search" element={<Searched />} />
             {/* Catch-all other routes for displaying an error page */}
             <Route path="*" element={<ErrorPage />} />
           </>

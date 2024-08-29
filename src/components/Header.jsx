@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { Form, Button } from "react-bootstrap";
 import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
@@ -14,6 +15,7 @@ import {
 
 function Header() {
   const [showSearch, setShowSearch] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
 
   const toggleSearch = () => {
     setShowSearch(!showSearch);
@@ -38,6 +40,20 @@ function Header() {
 
     fetchCategories();
   }, []);
+
+  const handleSearchChange = (event) => {
+    setSearchQuery(event.target.value);
+  };
+
+  // Create navigate function using useNavigate hook
+  const navigate = useNavigate();
+  const handleSearchSubmit = (event) => {
+    event.preventDefault();
+    if (searchQuery.trim() !== "") {
+      // Navigate to the Searched component with the query as a URL parameter
+      navigate(`/search?query=${encodeURIComponent(searchQuery)}`);
+    }
+  };
 
   return (
     <Navbar expand="lg" className="bg-body-tertiary">
@@ -67,7 +83,7 @@ function Header() {
                 style={{ Size: "20", color: "#5a5a5a" }}
               />
             </Button>
-            <Form className="d-flex">
+            <Form className="d-flex" onSubmit={handleSearchSubmit}>
               <Button
                 variant="link"
                 onClick={toggleSearch}
@@ -84,10 +100,17 @@ function Header() {
                   placeholder="Search"
                   className="me-2"
                   aria-label="Search"
+                  value={searchQuery}
+                  onChange={handleSearchChange}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      handleSearchSubmit(e); // Call the submit handler on Enter key
+                    }
+                  }}
                 />
               )}
             </Form>
-            <Nav.Link href="#home">Login</Nav.Link>
+            <Nav.Link href="">Login</Nav.Link>
           </Nav>
         </Navbar.Collapse>
       </Container>
