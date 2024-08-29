@@ -9,6 +9,7 @@ import {
   faStarHalfAlt,
   faStar as farStar
 } from "@fortawesome/free-solid-svg-icons";
+import ShimmerProductList from "./ShimmerProductList.jsx";
 
 export const fetchProducts = async () => {
   const { data } = await axios.get("https://dummyjson.com/products");
@@ -51,10 +52,13 @@ const ProductList = () => {
     queryFn: fetchProducts
   });
 
-  if (isLoading) return;
-  <div className="loading-container">
-    <l-dot-pulse size="43" speed="1.3" color="black"></l-dot-pulse>
-  </div>;
+  if (isLoading)
+    return (
+      // <div className="loading-container">
+      //   <l-dot-pulse size="43" speed="1.3" color="black"></l-dot-pulse>
+      // </div>
+      <ShimmerProductList />
+    );
   if (error)
     return <div className="error-container">Error: {error.message}</div>;
 

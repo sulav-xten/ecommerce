@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useLocation, useParams } from "react-router-dom";
 import ErrorPage from "./ErrorPage";
 import { renderStars } from "./ProductList";
+import ShimmerProductDetail from "./ShimmerProductDetail";
 // Import FontAwesome icons
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBasketShopping } from "@fortawesome/free-solid-svg-icons";
@@ -157,9 +158,22 @@ const SellerProfileSection = () => (
 const ProductDetail = () => {
   const { id } = useParams();
   const location = useLocation();
-  const product = location.state?.product;
+  const [product, setProduct] = useState(null);
   const [quantity, setQuantity] = useState(1);
   const [activeTab, setActiveTab] = useState("review");
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    // Simulate data fetching
+    setTimeout(() => {
+      setProduct(location.state?.product);
+      setLoading(false); // Set loading to false once data is fetched
+    }, 2000); // Simulate a 2-second loading time
+  }, [location.state?.product]);
+
+  if (loading) {
+    return <ShimmerProductDetail />; // Display shimmer while loading
+  }
 
   if (!product) {
     return <ErrorPage />;

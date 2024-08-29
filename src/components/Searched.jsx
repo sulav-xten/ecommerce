@@ -5,6 +5,7 @@ import CardGroup from "react-bootstrap/CardGroup";
 import Button from "react-bootstrap/Button";
 import { fetchProducts, renderStars } from "./ProductList";
 import Form from "react-bootstrap/Form";
+import ShimmerSearched from "./ShimmerSearched";
 
 function Searched() {
   const location = useLocation();
@@ -12,6 +13,7 @@ function Searched() {
   const [products, setProducts] = useState([]);
   const [sortOption, setSortOption] = useState("bestMatch");
   const navigate = useNavigate();
+  const [isLoading, setisLoading] = useState(true);
 
   useEffect(() => {
     // Fetch products and filter them based on the search query
@@ -34,6 +36,11 @@ function Searched() {
     };
 
     getProducts();
+    if (!products) {
+      setisLoading(true);
+    } else {
+      setisLoading(false);
+    }
   }, [query]);
 
   // Function to handle sorting
@@ -65,94 +72,102 @@ function Searched() {
 
   // You can use the `query` to fetch search results and display them here
   return (
-    <div className="container mx-auto mb-4">
-      <div className="row mb-4">
-        <div className="col-12 col-md-6">
-          <h3 className="my-4">Search Results for: {query}</h3>
-        </div>
-        <div className="col-12 col-md-6 d-flex flex-column flex-md-row align-items-md-center mt-4 mt-md-0">
-          <span
-            className="mb-2 mb-md-0 me-md-2 text-nowrap"
-            style={{ textAlign: "justify" }}
-          >
-            Sort By:
-          </span>
-          <Form.Select
-            aria-label="Best Match"
-            value={sortOption}
-            onChange={handleSortChange}
-          >
-            <option value="bestMatch">Best Match</option>
-            <option value="priceLowToHigh">Price low to high</option>
-            <option value="priceHighToLow">Price high to low</option>
-            <option value="ascending">Ascending</option>
-            <option value="descending">Descending</option>
-          </Form.Select>
-        </div>
-      </div>
-      <CardGroup>
-        {sortedProducts.length > 0 ? (
-          sortedProducts.map((product) => (
-            <div className="col pb-3" key={product.id}>
-              <Card
-                style={{ width: "18rem", cursor: "pointer" }}
-                onClick={() => handleCardClick(product)}
+    <>
+      {isLoading ? (
+        <ShimmerSearched />
+      ) : (
+        <div className="container mx-auto mb-4">
+          <div className="row mb-4">
+            <div className="col-12 col-md-6">
+              <h3 className="my-4">Search Results for: {query}</h3>
+            </div>
+            <div className="col-12 col-md-6 d-flex flex-column flex-md-row align-items-md-center mt-4 mt-md-0">
+              <span
+                className="mb-2 mb-md-0 me-md-2 text-nowrap"
+                style={{ textAlign: "justify" }}
               >
-                <Card.Img variant="top" src={product.thumbnail} />
-                <Card.Body>
-                  <Card.Title style={{ height: "3rem" }}>
-                    {product.title}
-                  </Card.Title>
-                  <Card.Text>
-                    {renderStars(product.rating)}&nbsp;
-                    {
+                Sort By:
+              </span>
+              <Form.Select
+                aria-label="Best Match"
+                value={sortOption}
+                onChange={handleSortChange}
+              >
+                <option value="bestMatch">Best Match</option>
+                <option value="priceLowToHigh">Price low to high</option>
+                <option value="priceHighToLow">Price high to low</option>
+                <option value="ascending">Ascending</option>
+                <option value="descending">Descending</option>
+              </Form.Select>
+            </div>
+          </div>
+          <CardGroup>
+            {sortedProducts.length > 0 ? (
+              sortedProducts.map((product) => (
+                <div className="col pb-3" key={product.id}>
+                  <Card
+                    style={{ width: "18rem", cursor: "pointer" }}
+                    onClick={() => handleCardClick(product)}
+                  >
+                    <Card.Img variant="top" src={product.thumbnail} />
+                    <Card.Body>
+                      <Card.Title style={{ height: "3rem" }}>
+                        {product.title}
+                      </Card.Title>
+                      <Card.Text>
+                        {renderStars(product.rating)}&nbsp;
+                        {
+                          <span
+                            className="small"
+                            style={{
+                              backgroundColor:
+                                product.availabilityStatus == "In Stock"
+                                  ? "green"
+                                  : "#c1292e",
+                              color: "white",
+                              padding: "5px",
+                              borderRadius: "5px"
+                            }}
+                          >
+                            {product.availabilityStatus}
+                          </span>
+                        }
+                      </Card.Text>
+                      <Card.Text></Card.Text>
+                      <s>$ {product.price}</s>
+                      &nbsp;
                       <span
                         className="small"
                         style={{
-                          backgroundColor:
-                            product.availabilityStatus == "In Stock"
-                              ? "green"
-                              : "#c1292e",
+                          backgroundColor: "#87c6eb",
                           color: "white",
                           padding: "5px",
                           borderRadius: "5px"
                         }}
                       >
-                        {product.availabilityStatus}
+                        -{product.discountPercentage} %
                       </span>
-                    }
-                  </Card.Text>
-                  <Card.Text></Card.Text>
-                  <s>$ {product.price}</s>
-                  &nbsp;
-                  <span
-                    className="small"
-                    style={{
-                      backgroundColor: "#87c6eb",
-                      color: "white",
-                      padding: "5px",
-                      borderRadius: "5px"
-                    }}
-                  >
-                    -{product.discountPercentage} %
-                  </span>
-                  <Card.Text>
-                    ${" "}
-                    {(
-                      product.price -
-                      (product.price * product.discountPercentage) / 100
-                    ).toFixed(2)}
-                  </Card.Text>
-                  <Button variant="primary">Add to Cart</Button>
-                </Card.Body>
-              </Card>
-            </div>
-          ))
-        ) : (
-          <p>No products found matching your search criteria.</p>
-        )}
-      </CardGroup>
-    </div>
+                      <Card.Text>
+                        ${" "}
+                        {(
+                          product.price -
+                          (product.price * product.discountPercentage) / 100
+                        ).toFixed(2)}
+                      </Card.Text>
+                      <Button variant="primary">Add to Cart</Button>
+                    </Card.Body>
+                  </Card>
+                </div>
+              ))
+            ) : (
+              <div className="row mb-4">
+                <p>No products found matching your search criteria.</p>
+              </div>
+            )}
+          </CardGroup>
+        </div>
+      )}
+    </>
   );
 }
 
