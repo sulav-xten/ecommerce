@@ -7,7 +7,9 @@ import ShimmerProductDetail from "./ShimmerProductDetail";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBasketShopping } from "@fortawesome/free-solid-svg-icons";
 import Nav from "react-bootstrap/Nav";
-// import Form from "react-bootstrap/Form";
+import Form from "react-bootstrap/Form";
+import { Button } from "react-bootstrap";
+import Rating from "./Rating.jsx";
 
 export const formatDate = (timestamp) => {
   const date = new Date(timestamp);
@@ -26,7 +28,7 @@ export const formatDate = (timestamp) => {
   return date.toLocaleDateString("en-US", options);
 };
 
-const ReviewSection = ({ reviews, ratingCounts }) => (
+const ReviewSection = ({ reviews, ratingCounts, handleRatingChange }) => (
   <div
     className="container mx-auto mb-5 p-4 rounded"
     style={{ textAlign: "justify" }}
@@ -63,29 +65,7 @@ const ReviewSection = ({ reviews, ratingCounts }) => (
             </p>
           ))}
         </div>
-        {/*Write your review */}
-        <div className="col-12 col-md-6 mb-4">
-          {/* <form>
-            <Form.Group className="mb-3" controlId="formBasicEmail">
-              <Form.Label>Email address</Form.Label>
-              <Form.Control type="email" placeholder="Enter email" />
-              <Form.Text className="text-muted">
-                We'll never share your email with anyone else.
-              </Form.Text>
-            </Form.Group>
-
-            <Form.Group className="mb-3" controlId="formBasicPassword">
-              <Form.Label>Password</Form.Label>
-              <Form.Control type="password" placeholder="Password" />
-            </Form.Group>
-            <Form.Group className="mb-3" controlId="formBasicCheckbox">
-              <Form.Check type="checkbox" label="Check me out" />
-            </Form.Group>
-            <Button variant="primary" type="submit">
-              Submit
-            </Button>
-          </form> */}
-        </div>
+        <div className="col-12 col-md-6 mb-4"></div>
       </div>
     ) : (
       ""
@@ -123,6 +103,25 @@ const ReviewSection = ({ reviews, ratingCounts }) => (
         No reviews yet. Be the first to review this product!
       </p>
     )}
+    <div className="col-24 col-md-12 mb-4">
+      <form>
+        <Form.Group className="mb-3">
+          <Form.Label>Write a Review</Form.Label>
+          <Form.Control type="text" placeholder="Write a review" />
+          {/* <Form.Text className="text-muted">
+            We'll never share your email with anyone else.
+          </Form.Text> */}
+        </Form.Group>
+
+        <Form.Group>
+          <Form.Label>Rate this Product</Form.Label>
+        </Form.Group>
+        <Rating onRatingChange={handleRatingChange} />
+        <Button variant="primary" className="mt-4" type="submit">
+          Submit
+        </Button>
+      </form>
+    </div>
   </div>
 );
 
@@ -162,6 +161,7 @@ const ProductDetail = () => {
   const [quantity, setQuantity] = useState(1);
   const [activeTab, setActiveTab] = useState("review");
   const [loading, setLoading] = useState(true);
+  const [rating, setRating] = useState(0);
 
   useEffect(() => {
     // Simulate data fetching
@@ -189,6 +189,11 @@ const ProductDetail = () => {
     if (quantity > 1) {
       setQuantity(quantity - 1);
     }
+  };
+
+  const handleRatingChange = (newRating) => {
+    setRating(newRating); // Update the state with the new rating
+    // console.log("User selected rating:", newRating);
   };
 
   const handleSelectTab = (tab) => {
@@ -347,6 +352,7 @@ const ProductDetail = () => {
           <ReviewSection
             reviews={product.reviews}
             ratingCounts={ratingCounts}
+            handleRatingChange={handleRatingChange}
           />
         )}
         {activeTab === "warranty" && (

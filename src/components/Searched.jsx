@@ -39,7 +39,10 @@ function Searched() {
     if (!products) {
       setisLoading(true);
     } else {
-      setisLoading(false);
+      // Simulate data fetching
+      setTimeout(() => {
+        setisLoading(false); // Set loading to false once data is fetched
+      }, 500); // Simulate a 1/2-second loading time
     }
   }, [query]);
 
