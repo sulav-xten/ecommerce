@@ -99,8 +99,8 @@ function Footer() {
             </p>
             <p className="text-white mb-0">
               Made with {""}
-              <FontAwesomeIcon icon={faHeart} className="text-danger" /> in
-              Pokhara, Nepal
+              <FontAwesomeIcon icon={faHeart} className="text-danger" /> by{" "}
+              <a href="https://sulav-parajuli.com.np" className="text-decoration-none">Sulav Parajuli</a>
             </p>
           </div>
 

@@ -11,6 +11,7 @@ import Category from "./components/Category.jsx";
 import Searched from "./components/Searched.jsx";
 import ErrorPage from "./components/ErrorPage.jsx";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import Login from "./components/Login.jsx";
 
 const queryClient = new QueryClient();
 
@@ -25,6 +26,7 @@ function App() {
             <Route path="/product/:id" element={<ProductDetail />} />
             <Route path="/category/:category" element={<Category />} />
             <Route path="/search" element={<Searched />} />
+            <Route path="/login" element={<Login />} />
             {/* Catch-all other routes for displaying an error page */}
             <Route path="*" element={<ErrorPage />} />
           </>
